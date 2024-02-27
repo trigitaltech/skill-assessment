@@ -1,0 +1,23 @@
+{
+    "name": "Laravel",
+    "service": "laravel",
+    "remoteUser": "root",
+    "shutdownAction": "stopCompose",
+    "workspaceFolder": "/var/www/html",
+    "dockerComposeFile": "../docker-compose.yml",
+    "features": {
+        "node": {
+            "version": "18",
+            "nodeGypDependencies": true
+        }
+    },
+    "postCreateCommand": "docker-php-ext-install pdo pdo_mysql mysqli",
+    "extensions": [
+        "DEVSENSE.composer-php-vscode",
+        "xdebug.php-pack",
+        "formulahendry.terminal",
+        "Vue.volar",
+        "xdebug.php-debug",
+        "onecentlin.laravel-extension-pack"
+    ]
+}
