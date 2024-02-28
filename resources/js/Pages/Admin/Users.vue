@@ -3,23 +3,50 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import Pagination from '@/Components/Pagination.vue'
 import BreezeButton from '@/Components/Button.vue';
 import BreezeLinkButton from '@/Components/LinkButton.vue';
+import ConfirmationDialog from '@/Components/Confirmation.vue';
+import SuccessFlash from '@/Components/SuccessFlash.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import { RefreshCw } from 'lucide-vue-next';
 import axios from 'axios';
 import { route } from 'ziggy-js';
-import { IUser, IPagination } from '@/interfaces'
+import { IUser, IPagination, ISharedProps } from '@/interfaces'
+import {ref} from 'vue';
 
 defineProps<{
 	users: IPagination<IUser>;
 }>();
 
+const user = ref<IUser>()
+const page = usePage<ISharedProps>();
+
 async function banSwitchUser(userId: number) {
 	await axios.post(route('admin.users.ban'), {
 		user_id: userId,
 	});
-	Inertia.reload({ only: ['users'] });
+	Inertia.reload({ only: ['users', 'flash']});
 }
+
+const confirm = ref<typeof ConfirmationDialog>()
+
+function openModal(selectedUser: IUser) {
+    user.value = selectedUser
+    confirm.value?.openModal(`Are you sure you want to ${selectedUser.active ? 'ban' : 'unban'} this user?`)
+}
+
+function cancel() {
+    user.value = undefined;
+    confirm.value?.closeModal();
+}
+
+function ban() {
+    if (user.value?.id)
+        banSwitchUser(user.value.id);
+    user.value = undefined;
+    confirm.value?.closeModal();
+}
+
+
 </script>
 
 <template>
@@ -37,9 +64,11 @@ async function banSwitchUser(userId: number) {
 			</div>
 		</template>
 		<div class="py-12">
+            <ConfirmationDialog ref="confirm" message="" @confirm="ban" @cancel="cancel" />
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 				<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 					<div class="p-6 bg-white border-b border-gray-200 relative overflow-x-auto">
+                        <SuccessFlash :success="page.props.value.flash.success || ''" />
 						<table class="w-full text-sm text-left rtl:text-right">
 							<thead class="text-xs uppercase ">
 								<tr class="bg-white border-b">
@@ -61,8 +90,11 @@ async function banSwitchUser(userId: number) {
 									<td class="px-6 py-4 ">
 										<BreezeLinkButton :href="route('admin.users.quotes', u.id)" class="mr-2">Quotes
 										</BreezeLinkButton>
-										<BreezeButton @click="banSwitchUser(u.id)"> {{ u.active ? "Ban" : "Unban" }}
+                                        <!-- confirm -->
+                                        <BreezeButton @click="openModal(u)"> {{ u.active ? "Ban" : "Unban" }}
 										</BreezeButton>
+										<!-- <BreezeButton @click="banSwitchUser(u.id)"> {{ u.active ? "Ban" : "Unban" }}
+										</BreezeButton> -->
 									</td>
 								</tr>
 							</tbody>

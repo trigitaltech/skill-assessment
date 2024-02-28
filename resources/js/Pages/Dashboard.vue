@@ -47,7 +47,7 @@ async function favoriteQuote(quote: IQuote) {
                        </div>
                        <div v-for="q in quotes" class="grid grid-cols-2 grid-flow-col p-2 rounded border my-2">
                         <div class="col-span-2">{{q.quote}} - {{ q.author }}</div>
-                        <div><Heart :fill="favorite[q.id]? 'red': 'black'" strokeWidth={0} @click="favoriteQuote(q)"/></div>
+                        <div class="cursor-pointer"><Heart :fill="favorite[q.id]? 'red': 'black'" strokeWidth={0} @click="favoriteQuote(q)"/></div>
                        </div>
                     </div>
                 </div>

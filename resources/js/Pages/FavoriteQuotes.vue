@@ -44,7 +44,7 @@ async function deleteQuote(quoteId: number) {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div v-for="q in quotes.data" class="grid grid-cols-2 grid-flow-col p-2 rounded border my-2">
                             <div class="col-span-2">{{ q.quote }} - {{ q.author }}</div>
-                            <div>
+                            <div class="cursor-pointer">
                                 <Trash2 @click="deleteQuote(q.quote_id)"/>
                             </div>
                         </div>

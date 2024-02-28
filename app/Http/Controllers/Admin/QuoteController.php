@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\FavoriteQuote;
 use App\Models\User;
 use Inertia\Inertia;
+use Session;
 
 class QuoteController extends Controller
 {
@@ -38,6 +39,7 @@ class QuoteController extends Controller
             'quote_id' => 'required|integer',
         ]);
         $deleted = FavoriteQuote::where('user_id', $request->input('user_id'))->where('quote_id', $request->input('quote_id'))->delete();
+        Session::flash('success', 'Quote removed successfully');
         return response()->json(['status' => $deleted? 'success': 'failed']);
     }
 }

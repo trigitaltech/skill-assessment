@@ -4,6 +4,7 @@ import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeButton from '@/Components/Button.vue';
+import SuccessFlash from '@/Components/SuccessFlash.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
@@ -69,20 +70,7 @@ const passwordUpdate = () => {
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <BreezeValidationErrors class="mb-4" />
-
-                        <div v-if="page.props.value.flash.success"
-                            class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                            role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div>
-                                {{ page.props.value.flash.success }}
-                            </div>
-                        </div>
+                        <SuccessFlash :success="page.props.value.flash.success" />
                         <form @submit.prevent="profileUpdate">
                             <div class="flex justify-end">
                                 <BreezeButton v-if="!updateInfo && !updatePassword" @click="updateInfo = !updateInfo"

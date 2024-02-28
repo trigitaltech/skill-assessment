@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
+use Session;
 
 class UserController extends Controller
 {
@@ -46,6 +47,7 @@ class UserController extends Controller
         $user->active = !$user->active;
         $user->save();
 
+        Session::flash('success', 'User updated successfully');
         return response()->json(['status' => 'success']);
     }
 }
