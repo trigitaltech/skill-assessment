@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', ['admin', 'user'])->nullable()->after('password')->default('user');
             $table->boolean('active')->after('role')->nullable()->default(true);
-            $table->string('name', 100)->default('text');
         });
     }
 

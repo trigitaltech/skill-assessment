@@ -17,6 +17,10 @@ class FavoriteQuoteController extends Controller
     {
         $quotes = FavoriteQuote::where('user_id', $request->user()->id)->paginate(15);
 
+        if ($request->wantsJson()) {
+            return response()->json($quotes);
+        }
+
         return Inertia::render('FavoriteQuotes', ['quotes' => $quotes]);
     }
 

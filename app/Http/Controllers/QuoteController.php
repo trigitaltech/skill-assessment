@@ -32,9 +32,16 @@ class QuoteController extends Controller
                 }
             }
         );
-        return Inertia::render('Dashboard', [
+
+        $payload = [
             'quotes' => $quotes,
             'ratelimit' => !$executed
-        ]);
+        ];
+
+        if ($request->expectsJson()) {
+            return response()->json($payload);
+        }
+
+        return Inertia::render('Dashboard', $payload);
     }
 }
